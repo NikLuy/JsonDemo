@@ -1,0 +1,54 @@
+﻿@page "/"
+@using JsonDemo.Data
+@using JsonDemo.Models
+@using JsonDemo.Service
+@using Newtonsoft.Json
+
+@rendermode InteractiveServer
+@inject ChargerService _chargerService
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+  <div class="input-group mb-2">
+    <button class="btn btn-primary" @onclick="()=>Add()">Add</button>
+    <button class="btn btn-danger" @onclick="()=>UpdateWithSubjekt()">Updat With Subjekt</button>
+    <button class="btn btn-secondary" @onclick="()=>UpdateWithSubjekt2()">Updat With Subjekt2</button>
+    <button class="btn btn-warning" @onclick="()=>UpdateWithNull()">Updat With null</button>
+</div>
+
+@code{
+    private Charger charger { get; set; } = new() { Id = new Guid("AA4DF729-AD63-4C75-3429-08DC4CEFA063"), Id_Subjekt = 65355, Id_Zustelladresse = 1233 };
+
+    private async Task Add()
+    {
+        // await _chargerService.UpSert(charger);
+        await _chargerService.UpSert(JsonConvert.SerializeObject(charger));
+    }
+
+    private async Task UpdateWithSubjekt()
+    {
+        charger.Updated = DateTime.Now;
+        charger.Subjekt = new SubjektDto() { Vorname = "Nik", Name = "Lussy", Adresse = "MyAddress 12" };
+        // await _chargerService.UpSert(charger);
+        await _chargerService.UpSert(JsonConvert.SerializeObject(charger));
+    }
+
+    private async Task UpdateWithSubjekt2()
+    {
+        charger.Updated = DateTime.Now;
+        charger.Subjekt = new SubjektDto() { Vorname = "Another", Name = "Name", Adresse = "HisAddress 12" };
+        // await _chargerService.UpSert(charger);
+        await _chargerService.UpSert(JsonConvert.SerializeObject(charger));
+    }
+
+    private async Task UpdateWithNull()
+    {
+        charger.Updated = DateTime.Now;
+        charger.Subjekt = null;
+        // await _chargerService.UpSert(charger);
+        await _chargerService.UpSert(JsonConvert.SerializeObject(charger));
+    }
+
+}
+
